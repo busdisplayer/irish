@@ -40,7 +40,7 @@
     </table>
   </div>
     <script>
-      const vocabulaireIrlandais = [];
+      let vocabulaireIrlandais = [];
 // Remplacez '14pLUY0i1RikionR1YVdivygeJ1OyApRvVjYr7Qmh_8Q' par l'ID de votre feuille de calcul
 const spreadsheetId = '14pLUY0i1RikionR1YVdivygeJ1OyApRvVjYr7Qmh_8Q';
 // Remplacez 'Feuille1' par le nom de votre feuille
@@ -60,7 +60,7 @@ fetch(url)
   .then(data => {
     if (data.values) {
       // Initialisation du tableau vocabulaireIrlandais
-      const vocabulaireIrlandais = data.values.map(row => ({
+    vocabulaireIrlandais = data.values.map(row => ({
         motIrlandais: row[0],
         traductionFrancais: row[1],
         traductionAnglais: row[2],
