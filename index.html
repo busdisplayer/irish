@@ -119,6 +119,7 @@ console.log(vocabulaireIrlandais);
     <script>
       function verifierVoixIrlandaise() {
       const voices = window.speechSynthesis.getVoices();
+        console.log(voices);
       irishVoice = voices.find(voice => voice.lang.startsWith("ga"));
       if (!irishVoice) {
         alert("Voix en irlandais non disponible. Veuillez vérifier si elle peut être installée dans les paramètres de synthèse vocale de votre système.");
