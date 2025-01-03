@@ -9,6 +9,36 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   </head>
   <body>
+    <div class="w3-xlarge w3-blue w3-center">
+      <p>Irish Vocabulary</p>
+      <img class="w3-image" src="https://cdn.pixabay.com/photo/2019/11/01/14/42/ireland-4594424_640.jpg" alt="Drapeau irlandais"></img>
+    </div>
+    <div class="w3-container">
+    <h2 class="w3-center">Sélecteur de Thème - Vocabulaire Irlandais</h2>
+
+    <!-- Selecteur de thèmes -->
+    <div class="w3-margin">
+      <label for="themeSelect" class="w3-text-blue">Choisissez un thème :</label>
+      <select id="themeSelect" class="w3-select w3-border" onchange="afficherTableau()">
+        <!-- Options générées par le script -->
+      </select>
+    </div>
+
+    <!-- Table -->
+    <table id="vocabTable" class="w3-table-all w3-hoverable w3-margin-top w3-striped">
+      <thead>
+        <tr class="w3-blue">
+          <th>Mot en Irlandais</th>
+          <th>Traduction (Français)</th>
+          <th>Traduction (Anglais)</th>
+          <th>Indice Prononciation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Contenu généré par le script -->
+      </tbody>
+    </table>
+  </div>
     <script>
       const vocabulaireIrlandais = [
   {
@@ -85,5 +115,6 @@
 
 console.log(vocabulaireIrlandais);
     </script>
+    
   </body>
 </html>
