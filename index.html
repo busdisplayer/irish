@@ -10,138 +10,213 @@
   </head>
   <body class="w3-center">
     <div style="width:100%;" class="w3-xlarge w3-blue w3-center">
-      <p style="width:100%;">Irish Vocabulary</p>
-      <img style="width:100%;" class="w3-image" src="https://cdn.pixabay.com/photo/2019/11/01/14/42/ireland-4594424_640.jpg" alt="Drapeau irlandais"></img>
-    </div>
-    <div class="w3-container">
-      <h2 class="w3-center w3-blue">Vocabulaire par thèmes</h2>
+  <p style="width:100%;">Irish Vocabulary</p>
+  <img style="width:100%;" class="w3-image" src="https://cdn.pixabay.com/photo/2019/11/01/14/42/ireland-4594424_640.jpg" alt="Drapeau irlandais"></img>
+</div>
+<div class="w3-container">
+  <h2 class="w3-center w3-blue">Vocabulaire par thèmes</h2>
 
-      <!-- Selecteur de thèmes -->
-      <div class="w3-margin">
-        <label for="themeSelect" class="w3-text-blue">Choisissez un thème :</label>
-        <select id="themeSelect" class="w3-select w3-border" onchange="afficherTableau()">
-          <!-- Options générées par le script -->
-        </select>
-      </div>
+  <!-- Selecteur de thèmes -->
+  <div class="w3-margin">
+    <label for="themeSelect" class="w3-text-blue">Choisissez un thème :</label>
+    <select id="themeSelect" class="w3-select w3-border" onchange="afficherTableau()">
+      <!-- Options générées par le script -->
+    </select>
+  </div>
 
-      <!-- Table -->
-      <table id="vocabTable" style="width:100%;" class="w3-table-all w3-hoverable w3-margin-top w3-striped">
-        <thead>
-          <tr class="w3-blue">
-            <th>Mot en Irlandais</th>
-            <th>Phonétique</th>
-            <th>Traduction</th>
-            <th>Écouter</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Contenu généré par le script -->
-        </tbody>
-      </table>
-    </div>
+  <!-- Table -->
+  <table id="vocabTable" style="width:100%;" class="w3-table-all w3-hoverable w3-margin-top w3-striped">
+    <thead>
+      <tr class="w3-blue">
+        <th>Mot en Irlandais</th>
+        <th>Phonétique</th>
+        <th>Traduction</th>
+        <th>Écouter</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Contenu généré par le script -->
+    </tbody>
+  </table>
+</div>
 
-    <script>
-      let vocabulaireIrlandais = [];
-      const spreadsheetId = '14pLUY0i1RikionR1YVdivygeJ1OyApRvVjYr7Qmh_8Q'; // ID de votre feuille de calcul
-      const sheetName = 'Vocabulary'; // Nom de la feuille dans Google Sheets
+<!-- Popup Modal -->
+<div id="popup" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+    <h2 id="popupWord" class="w3-center"></h2>
+    <img id="popupImage" class="w3-image" style="width:100%;" alt="Image">
+    <p><strong>Traduction :</strong> <span id="popupTranslation"></span></p>
+    <p><strong>Transcription :</strong> <span id="popupTranscription" style="font-weight: bold;"></span></p>
+  </div>
+</div>
 
-      // URL de l'API Google Sheets
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=AIzaSyAnXeNFcsaDIEW4tVTValvOiW5KySE8F9Q`;
+<script>
+  let vocabulaireIrlandais = [];
+  const spreadsheetId = '14pLUY0i1RikionR1YVdivygeJ1OyApRvVjYr7Qmh_8Q'; // ID de votre feuille de calcul
+  const sheetName = 'Vocabulary'; // Nom de la feuille dans Google Sheets
 
-      // Fonction pour récupérer les données de Google Sheets
-      fetch(url)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data.values) {
-            // Initialisation du tableau vocabulaireIrlandais
-            vocabulaireIrlandais = data.values.map(row => ({
-              motIrlandais: row[0],
-              traductionFrancais: row[1],
-              traductionAnglais: row[2],
-              theme: row[3],
-              indicePrononciation: row[4],
-              englishTranscription: row[5]
-            }));
-            console.log(vocabulaireIrlandais);
+  // URL de l'API Google Sheets
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=AIzaSyAnXeNFcsaDIEW4tVTValvOiW5KySE8F9Q`;
 
-            // Remplir le sélecteur de thèmes après la récupération des données
-            const themes = [...new Set(vocabulaireIrlandais.map(item => item.theme))];
-            const themeSelect = document.getElementById("themeSelect");
+  // Fonction pour récupérer les données de Google Sheets
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.values) {
+        // Initialisation du tableau vocabulaireIrlandais
+        vocabulaireIrlandais = data.values.map(row => ({
+          motIrlandais: row[0],
+          traductionFrancais: row[1],
+          traductionAnglais: row[2],
+          theme: row[3],
+          indicePrononciation: row[4],
+          englishTranscription: row[5]
+        }));
 
-            themes.forEach(theme => {
-              const option = document.createElement("option");
-              option.value = theme;
-              option.textContent = theme;
-              themeSelect.appendChild(option);
-            });
+        // Remplir le sélecteur de thèmes après la récupération des données
+        const themes = [...new Set(vocabulaireIrlandais.map(item => item.theme))];
+        const themeSelect = document.getElementById("themeSelect");
 
-            // Initialiser avec le premier thème
-            afficherTableau();
-          } else {
-            console.log('Aucune donnée trouvée.');
-          }
-        })
-        .catch(error => {
-          console.error('Erreur lors de la récupération des données :', error.message);
+        themes.forEach(theme => {
+          const option = document.createElement("option");
+          option.value = theme;
+          option.textContent = theme;
+          themeSelect.appendChild(option);
         });
 
-      // Fonction pour afficher le tableau en fonction du thème sélectionné
-      function afficherTableau() {
-        const selectedTheme = document.getElementById("themeSelect").value;
-        const filteredWords = vocabulaireIrlandais.filter(item => item.theme === selectedTheme);
-        const vocabTableBody = document.querySelector("#vocabTable tbody");
-
-        // Effacer le contenu précédent
-        vocabTableBody.innerHTML = "";
-
-        // Ajouter les lignes correspondant au thème sélectionné
-        filteredWords.forEach(word => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${word.motIrlandais}</td>
-            <td>${word.traductionFrancais}</td>
-            <td>${word.traductionAnglais}</td>
-            <td><button class="w3-button w3-blue" onclick="lireMot('${word.motIrlandais}')">Écouter</button></td>
-          `;
-          vocabTableBody.appendChild(row);
-        });
-      }
-
-      // Fonction pour lire un mot en irlandais
-      let irishVoice = null;
-
-      function verifierVoixIrlandaise() {
-        const voices = window.speechSynthesis.getVoices();
-        irishVoice = voices.find(voice => voice.lang.startsWith("ga"));
-        if (!irishVoice) {
-          alert("Voix en irlandais non disponible. Veuillez vérifier si elle peut être installée dans les paramètres de synthèse vocale de votre système.");
-        }
-      }
-
-      // Initialisation des voix
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.onvoiceschanged = verifierVoixIrlandaise;
+        // Initialiser avec le premier thème
+        afficherTableau();
       } else {
-        alert("Synthèse vocale non prise en charge par ce navigateur.");
+        console.log('Aucune donnée trouvée.');
       }
+    })
+    .catch(error => {
+      console.error('Erreur lors de la récupération des données :', error.message);
+    });
 
-      // Fonction pour lire un mot en irlandais
-      function lireMot(texte) {
-        if (irishVoice) {
-          const utterance = new SpeechSynthesisUtterance(texte);
-          utterance.voice = irishVoice;
-          utterance.lang = "ga-IE";
-          window.speechSynthesis.speak(utterance);
+  // Fonction pour afficher le tableau en fonction du thème sélectionné
+  function afficherTableau() {
+    const selectedTheme = document.getElementById("themeSelect").value;
+    const filteredWords = vocabulaireIrlandais.filter(item => item.theme === selectedTheme);
+    const vocabTableBody = document.querySelector("#vocabTable tbody");
+
+    // Effacer le contenu précédent
+    vocabTableBody.innerHTML = "";
+
+    // Ajouter les lignes correspondant au thème sélectionné
+    filteredWords.forEach(word => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><button class="w3-button w3-blue" onclick="openPopup('${word.motIrlandais}', '${word.traductionFrancais}', '${word.englishTranscription}', '${word.indicePrononciation}')">${word.motIrlandais}</button></td>
+        <td>${word.indicePrononciation}</td>
+        <td>${word.traductionFrancais}</td>
+        <td><button class="w3-button w3-blue" onclick="lireMot('${word.motIrlandais}')">Écouter</button></td>
+      `;
+      vocabTableBody.appendChild(row);
+    });
+  }
+
+  // Fonction pour ouvrir la popup
+  function openPopup(word, translation, transcription, pronunciation) {
+    document.getElementById("popupWord").textContent = word;
+    document.getElementById("popupTranslation").textContent = translation.charAt(0).toUpperCase() + translation.slice(1); // Majuscule pour la traduction
+    document.getElementById("popupTranscription").textContent = transcription;
+
+    // Appel à l'API Pixabay pour obtenir une image
+    const pixabayUrl = `https://pixabay.com/api/?key=39621845-2d623f5bd55f8bbfd2608cc69&q=${encodeURIComponent(word)}&image_type=illustration`;
+    
+    fetch(pixabayUrl)
+      .then(response => response.json())
+      .then(data => {
+        if (data.hits && data.hits.length > 0) {
+          const imageUrl = data.hits[0].webformatURL; // Première image trouvée
+          document.getElementById("popupImage").src = imageUrl;
         } else {
-          alert("La voix en irlandais n'est pas disponible.");
+          document.getElementById("popupImage").src = "https://via.placeholder.com/500"; // Image par défaut
         }
-      }
-    </script>
+      })
+      .catch(error => console.error('Erreur Pixabay:', error));
+
+    // Afficher la popup
+    document.getElementById("popup").style.display = "flex";
+  }
+
+  // Fonction pour fermer la popup
+  function closePopup() {
+    document.getElementById("popup").style.display = "none";
+  }
+
+  // Fonction pour lire un mot en irlandais
+  let irishVoice = null;
+
+  function verifierVoixIrlandaise() {
+    const voices = window.speechSynthesis.getVoices();
+    irishVoice = voices.find(voice => voice.lang.startsWith("ga"));
+    if (!irishVoice) {
+      alert("Voix en irlandais non disponible. Veuillez vérifier si elle peut être installée dans les paramètres de synthèse vocale de votre système.");
+    }
+  }
+
+  // Initialisation des voix
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.onvoiceschanged = verifierVoixIrlandaise;
+  } else {
+    alert("Synthèse vocale non prise en charge par ce navigateur.");
+  }
+
+  // Fonction pour lire un mot en irlandais
+  function lireMot(texte) {
+    if (irishVoice) {
+      const utterance = new SpeechSynthesisUtterance(texte);
+      utterance.voice = irishVoice;
+      utterance.lang = "ga-IE";
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("La voix en irlandais n'est pas disponible.");
+    }
+  }
+</script>
+
+<style>
+  /* Style de la popup */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    text-align: center;
+  }
+
+  .close-btn {
+    font-size: 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+</style>
+
       <div style="width:100%;" class="w3-xlarge w3-blue w3-center">
       <p style="width:100%;">Prononciation</p>
     </div>
