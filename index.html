@@ -115,6 +115,43 @@
 
 console.log(vocabulaireIrlandais);
     </script>
+    <script>
+          // Générer les options du sélecteur de thèmes
+    const themes = [...new Set(vocabulaireIrlandais.map(item => item.theme))];
+    const themeSelect = document.getElementById("themeSelect");
+
+    themes.forEach(theme => {
+      const option = document.createElement("option");
+      option.value = theme;
+      option.textContent = theme;
+      themeSelect.appendChild(option);
+    });
+
+    // Fonction pour afficher le tableau
+    function afficherTableau() {
+      const selectedTheme = themeSelect.value;
+      const filteredWords = vocabulaireIrlandais.filter(item => item.theme === selectedTheme);
+      const vocabTableBody = document.querySelector("#vocabTable tbody");
+
+      // Effacer le contenu précédent
+      vocabTableBody.innerHTML = "";
+
+      // Ajouter les lignes correspondant au thème sélectionné
+      filteredWords.forEach(word => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${word.motIrlandais}</td>
+          <td>${word.traductionFrancais}</td>
+          <td>${word.traductionAnglais}</td>
+          <td>${word.indicePrononciation}</td>
+        `;
+        vocabTableBody.appendChild(row);
+      });
+    }
+
+    // Initialiser avec le premier thème
+    afficherTableau();
+  </script>
     
   </body>
 </html>
