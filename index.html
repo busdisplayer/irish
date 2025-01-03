@@ -130,7 +130,7 @@
     document.getElementById("popupTranscription").textContent = transcription;
 
     // Appel à l'API Pixabay pour obtenir une image
-    const pixabayUrl = `https://pixabay.com/api/?key=39621845-2d623f5bd55f8bbfd2608cc69&q=${encodeURIComponent(inenglish)}&image_type=vector&safesearch=true`;
+    const pixabayUrl = `https://pixabay.com/api/?key=39621845-2d623f5bd55f8bbfd2608cc69&q=${encodeURIComponent(inenglish)}&image_type=illustration&safesearch=true`;
     
     fetch(pixabayUrl)
       .then(response => response.json())
