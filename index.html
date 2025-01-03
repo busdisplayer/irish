@@ -32,6 +32,7 @@
           <th>Traduction (Français)</th>
           <th>Traduction (Anglais)</th>
           <th>Indice Prononciation</th>
+          <th>Écouter</th>
         </tr>
       </thead>
       <tbody>
@@ -116,6 +117,20 @@
 console.log(vocabulaireIrlandais);
     </script>
     <script>
+      function verifierVoixIrlandaise() {
+      const voices = window.speechSynthesis.getVoices();
+      irishVoice = voices.find(voice => voice.lang.startsWith("ga"));
+      if (!irishVoice) {
+        alert("Voix en irlandais non disponible. Veuillez vérifier si elle peut être installée dans les paramètres de synthèse vocale de votre système.");
+      }
+    }
+
+    // Initialisation des voix
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = verifierVoixIrlandaise;
+    } else {
+      alert("Synthèse vocale non prise en charge par ce navigateur.");
+    }
           // Générer les options du sélecteur de thèmes
     const themes = [...new Set(vocabulaireIrlandais.map(item => item.theme))];
     const themeSelect = document.getElementById("themeSelect");
@@ -144,6 +159,7 @@ console.log(vocabulaireIrlandais);
           <td>${word.traductionFrancais}</td>
           <td>${word.traductionAnglais}</td>
           <td>${word.indicePrononciation}</td>
+          <td><button class="w3-button w3-blue" onclick="lireMot('${word.motIrlandais}')">Écouter</button></td>
         `;
         vocabTableBody.appendChild(row);
       });
@@ -151,6 +167,17 @@ console.log(vocabulaireIrlandais);
 
     // Initialiser avec le premier thème
     afficherTableau();
+
+       function lireMot(texte) {
+      if (irishVoice) {
+        const utterance = new SpeechSynthesisUtterance(texte);
+        utterance.voice = irishVoice;
+        utterance.lang = "ga-IE";
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("La voix en irlandais n'est pas disponible.");
+      }
+    }
   </script>
     
   </body>
