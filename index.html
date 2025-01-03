@@ -113,7 +113,7 @@
     filteredWords.forEach(word => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td><button class="w3-button w3-blue" onclick="openPopup('${word.motIrlandais}', `${word.traductionAnglais}`,'${word.traductionFrancais}', '${word.englishTranscription}', '${word.indicePrononciation}')">${word.motIrlandais}</button></td>
+       <td><button class="w3-button w3-blue" onclick="openPopup('${word.motIrlandais}', '${word.traductionAnglais}', '${word.traductionFrancais}', '${word.englishTranscription}', '${word.indicePrononciation}')">${word.motIrlandais}</button></td>
         <td>${word.indicePrononciation}</td>
         <td>${word.traductionFrancais}</td>
         <td><button class="w3-button w3-blue" onclick="lireMot('${word.motIrlandais}')">Écouter</button></td>
