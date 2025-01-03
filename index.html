@@ -40,79 +40,42 @@
     </table>
   </div>
     <script>
-      const vocabulaireIrlandais = [
-  {
-    motIrlandais: "a haon",
-    traductionFrancais: "un",
-    traductionAnglais: "one",
-    theme: "Chiffre",
-    indicePrononciation: "a hane (a ha-on)"
-  },
-  {
-    motIrlandais: "a dó",
-    traductionFrancais: "deux",
-    traductionAnglais: "two",
-    theme: "Chiffre",
-    indicePrononciation: "a doe (a do)"
-  },
-  {
-    motIrlandais: "a trí",
-    traductionFrancais: "trois",
-    traductionAnglais: "three",
-    theme: "Chiffre",
-    indicePrononciation: "a tree"
-  },
-  {
-    motIrlandais: "a ceathair",
-    traductionFrancais: "quatre",
-    traductionAnglais: "four",
-    theme: "Chiffre",
-    indicePrononciation: "a kah-her"
-  },
-  {
-    motIrlandais: "a cúig",
-    traductionFrancais: "cinq",
-    traductionAnglais: "five",
-    theme: "Chiffre",
-    indicePrononciation: "a coo-ig"
-  },
-  {
-    motIrlandais: "a sé",
-    traductionFrancais: "six",
-    traductionAnglais: "six",
-    theme: "Chiffre",
-    indicePrononciation: "a shay"
-  },
-  {
-    motIrlandais: "a seacht",
-    traductionFrancais: "sept",
-    traductionAnglais: "seven",
-    theme: "Chiffre",
-    indicePrononciation: "a shocked"
-  },
-  {
-    motIrlandais: "a hocht",
-    traductionFrancais: "huit",
-    traductionAnglais: "eight",
-    theme: "Chiffre",
-    indicePrononciation: "a huckt"
-  },
-  {
-    motIrlandais: "a naoi",
-    traductionFrancais: "neuf",
-    traductionAnglais: "nine",
-    theme: "Chiffre",
-    indicePrononciation: "a nee"
-  },
-  {
-    motIrlandais: "a deich",
-    traductionFrancais: "dix",
-    traductionAnglais: "ten",
-    theme: "Chiffre",
-    indicePrononciation: "a deh"
-  }
-];
+      const vocabulaireIrlandais = [];
+// Remplacez '14pLUY0i1RikionR1YVdivygeJ1OyApRvVjYr7Qmh_8Q' par l'ID de votre feuille de calcul
+const spreadsheetId = '14pLUY0i1RikionR1YVdivygeJ1OyApRvVjYr7Qmh_8Q';
+// Remplacez 'Feuille1' par le nom de votre feuille
+const sheetName = 'Vocabulary';
 
+// URL de l'API Google Sheets
+const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${sheetName}?key=AIzaSyAnXeNFcsaDIEW4tVTValvOiW5KySE8F9Q`;
+
+// Fonction pour récupérer les données
+fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.values) {
+      // Initialisation du tableau vocabulaireIrlandais
+      const vocabulaireIrlandais = data.values.map(row => ({
+        motIrlandais: row[0],
+        traductionFrancais: row[1],
+        traductionAnglais: row[2],
+        theme: row[3],
+        indicePrononciation: row[4]
+      }));
+      console.log(vocabulaireIrlandais);
+    } else {
+      console.log('Aucune donnée trouvée.');
+    }
+  })
+  .catch(error => {
+    console.error('Erreur lors de la récupération des données :', error.message);
+  });
+      
 console.log(vocabulaireIrlandais);
     </script>
     <script>
